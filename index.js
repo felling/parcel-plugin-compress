@@ -117,7 +117,7 @@ module.exports = bundler => {
 			if (err) { return reject(err); }
 
 			if (stat.size > compressedContent.length) {
-				const fileName = file + (config.fileExtension.gzip || '.gz');
+				const fileName = file + config.fileExtension.gzip;
 
 				fs.writeFile(fileName, compressedContent, () => {
 					const end = new Date().getTime();
@@ -155,7 +155,7 @@ module.exports = bundler => {
 				const compressedContent = brotli.compress(content, config);
 
 				if (compressedContent !== null && stat.size > compressedContent.length) {
-					const fileName = file + (config.fileExtension.brotli || '.br');
+					const fileName = file + config.fileExtension.brotli;
 
 					fs.writeFile(fileName, compressedContent, () => {
 						const end = new Date().getTime();

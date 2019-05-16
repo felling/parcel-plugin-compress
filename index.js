@@ -14,6 +14,10 @@ const defaultOptions = {
 	test: '.',
 	threshold: undefined,
 	concurrency: 2,
+	fileExtension: {
+	  gzip: '.gz',
+          brotli: '.br'		
+	},
 	gzip: {
 		enabled: true,
 		numiterations: 15,
@@ -113,7 +117,7 @@ module.exports = bundler => {
 			if (err) { return reject(err); }
 
 			if (stat.size > compressedContent.length) {
-				const fileName = file + '.gz';
+				const fileName = file + (config.fileExtension.gzip || '.gz');
 
 				fs.writeFile(fileName, compressedContent, () => {
 					const end = new Date().getTime();
@@ -151,7 +155,7 @@ module.exports = bundler => {
 				const compressedContent = brotli.compress(content, config);
 
 				if (compressedContent !== null && stat.size > compressedContent.length) {
-					const fileName = file + '.br';
+					const fileName = file + (config.fileExtension.brotli || '.br');
 
 					fs.writeFile(fileName, compressedContent, () => {
 						const end = new Date().getTime();

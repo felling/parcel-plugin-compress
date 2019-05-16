@@ -51,7 +51,7 @@ module.exports = bundler => {
 
 			try {
 				const explorer = comsiconfig('compress');
-				const { config: { gzip, brotli, test, threshold } } = (await explorer.search()) || { config: defaultOptions }
+				const { config: { gzip, brotli, test, threshold, fileExtension } } = (await explorer.search()) || { config: defaultOptions }
 
 				const fileTest = new RegExp(test)
 				function* filesToCompress(bundle) {
@@ -66,8 +66,8 @@ module.exports = bundler => {
 				const queue = new pQueue({ concurrency: defaultOptions.concurrency });
 
 				[...filesToCompress(bundle)].forEach(file => {
-					queue.add(() => gzipCompress(file, { ...defaultOptions.gzip, threshold, ...gzip  }));
-					queue.add(() => brotliCompress(file, { ...defaultOptions.brotli, threshold, ...brotli }));
+					queue.add(() => gzipCompress(file, { ...defaultOptions.gzip, fileExtension, threshold, ...gzip  }));
+					queue.add(() => brotliCompress(file, { ...defaultOptions.brotli, fileExtension, threshold, ...brotli }));
 				});
 
 				await queue.onIdle();
